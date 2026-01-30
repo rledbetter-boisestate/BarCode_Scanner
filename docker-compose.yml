@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # 1. Database
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: library
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  # 2. Backend API
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgres://user:password@db:5432/library
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  # 3. Frontend (Angular)
+  web:
+    build: ./frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - api

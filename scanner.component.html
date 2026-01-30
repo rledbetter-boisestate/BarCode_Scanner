@@ -1,0 +1,27 @@
+<div class="scanner-container">
+  <h1>Library Scanner</h1>
+  
+  <zxing-scanner (scanSuccess)="onCodeResult($event)"></zxing-scanner>
+
+  <div class="status-panel">
+    <h2>Current Shelf: {{ currentShelf || 'None Scanned' }}</h2>
+    
+    <div *ngIf="alertMessage" class="alert-box">
+      {{ alertMessage }}
+    </div>
+
+    <h3>Books on this Shelf:</h3>
+    <table>
+      <thead>
+        <tr><th>Barcode</th><th>Call Num</th><th>Last Scanned</th></tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of shelfBooks" [class.highlight]="book.barcode === scanResult">
+          <td>{{ book.barcode }}</td>
+          <td>{{ book.call_number }}</td>
+          <td>{{ book.last_scanned | date:'short' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
